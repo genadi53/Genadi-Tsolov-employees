@@ -5,30 +5,6 @@ import {
   ProjectEmployeesData,
 } from "./types";
 
-// const data: [number, number, string, string][] = [
-//   [1, 1, "2022/03/15", "2002/02/25"],
-//   [2, 1, "2020/09/20", "2007/08/21"],
-//   [3, 2, "2012/04/29", "2010/10/15"],
-//   [4, 3, "2016/06/23", "2022/11/13"],
-//   [5, 3, "2020/02/13", ""],
-// ];
-
-// const map = new Map<number, number[]>();
-// data.map((el: [number, number, string, string]) => {
-//   const [id, projId, _dateStart, _dateEnd] = el;
-//   if (map.has(projId)) {
-//     const emplIds = map.get(projId);
-//     map.set(projId, emplIds ? [...emplIds, id] : [id]);
-//   } else {
-//     map.set(projId, [id]);
-//   }
-// });
-
-// map.forEach((val, key) => {
-//   console.log(val);
-//   val.forEach((el) => console.log(el));
-// });
-
 export const getParsedData = (
   csvString: string,
   delimiter = ",",
@@ -41,7 +17,6 @@ export const getParsedData = (
 
   for (let row of rows) {
     const rowData = row.split(delimiter);
-    // console.log(rowData);
     const [empIdStr, projectIdStr, dateFromStr, dateToStr] = rowData;
     csvData.push([
       Number(empIdStr),
@@ -71,41 +46,56 @@ export const getProjectEmployees = (csvData: ParsedCSVData) => {
       projectMap.set(projectId, [{ empId, dateFrom, dateTo }]);
     }
   }
-  console.log(projectMap);
+  // console.log(projectMap);
 
-  const res: EmployeesWorkingTogetherData[] = [];
-  const passedIds: number[] = [];
+  const result: EmployeesWorkingTogetherData[] = [];
+  // const passedIds: number[] = [];
 
   for (const projectEmployeesArray of projectMap.values()) {
-    console.log(projectEmployeesArray);
+    // console.log(projectEmployeesArray);
 
-    for (const emp1 of projectEmployeesArray) {
-      for (const emp2 of projectEmployeesArray) {
-        if (emp1.empId === emp2.empId || passedIds.includes(emp2.empId))
-          continue;
-        const days = getDaysTogether(
-          {
-            dateFrom: emp1.dateFrom,
-            dateTo: emp1.dateTo,
-          },
-          {
-            dateFrom: emp2.dateFrom,
-            dateTo: emp2.dateTo,
-          }
-        );
+    projectEmployeesArray.reduce((prev, curr) => {
+      const days = getDaysTogether(
+        {
+          dateFrom: prev.dateFrom,
+          dateTo: prev.dateTo,
+        },
+        {
+          dateFrom: curr.dateFrom,
+          dateTo: curr.dateTo,
+        }
+      );
+      result.push({ empId1: prev.empId, empId2: curr.empId, days });
+      return curr;
+    });
 
-        passedIds.push(emp1.empId);
-        console.log(days);
-        console.log(emp1.empId);
-        console.log(emp2.empId);
+    // for (const emp1 of projectEmployeesArray) {
+    //   for (const emp2 of projectEmployeesArray) {
+    //     if (emp1.empId === emp2.empId || passedIds.includes(emp2.empId))
+    //       continue;
+    //     const days = getDaysTogether(
+    //       {
+    //         dateFrom: emp1.dateFrom,
+    //         dateTo: emp1.dateTo,
+    //       },
+    //       {
+    //         dateFrom: emp2.dateFrom,
+    //         dateTo: emp2.dateTo,
+    //       }
+    //     );
 
-        res.push({
-          empId1: emp1.empId,
-          empId2: emp2.empId,
-          days,
-        });
-      }
-    }
+    //     passedIds.push(emp1.empId);
+    //     // console.log(days);
+    //     // console.log(emp1.empId);
+    //     // console.log(emp2.empId);
+
+    //     result.push({
+    //       empId1: emp1.empId,
+    //       empId2: emp2.empId,
+    //       days,
+    //     });
+    //   }
+    // }
   }
-  return res;
+  return result;
 };
