@@ -4,6 +4,7 @@ import { UploadIcon } from "@/components/uploadIcon";
 import { Button } from "./ui/button";
 import { ParsedCSVData } from "@/utils/types";
 import { getParsedData } from "@/utils/csv";
+import { Input } from "./ui/input";
 
 type FormProps = {
   setData: React.Dispatch<React.SetStateAction<ParsedCSVData | null>>;
@@ -36,15 +37,17 @@ export const UploadForm: React.FC<FormProps> = ({ setData }) => {
               aria-hidden="true"
             />
             <div className="mt-4 flex items-center justify-evenly text-sm leading-6 text-gray-600">
-              <input
-                type="file"
-                accept=".csv"
-                onChange={(e) => {
-                  if (!e.target.files) return;
-                  setCsvFile(e.target.files[0]);
-                }}
-                className=""
-              />
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Input
+                  type="file"
+                  accept=".csv"
+                  onChange={(e) => {
+                    if (!e.target.files) return;
+                    setCsvFile(e.target.files[0]);
+                  }}
+                  className="flex flex-row justify-between items-center"
+                />
+              </div>
             </div>
             <p className="my-2 text-xs leading-5 text-primaryDark dark:text-white">
               Choose a CSV file to upload
