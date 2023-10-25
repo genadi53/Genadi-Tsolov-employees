@@ -46,14 +46,9 @@ export const getProjectEmployees = (csvData: ParsedCSVData) => {
       projectMap.set(projectId, [{ empId, dateFrom, dateTo }]);
     }
   }
-  // console.log(projectMap);
 
   const result: EmployeesWorkingTogetherData[] = [];
-  // const passedIds: number[] = [];
-
   for (const projectEmployeesArray of projectMap.values()) {
-    // console.log(projectEmployeesArray);
-
     projectEmployeesArray.reduce((prev, curr) => {
       const days = getDaysTogether(
         {
@@ -68,34 +63,6 @@ export const getProjectEmployees = (csvData: ParsedCSVData) => {
       result.push({ empId1: prev.empId, empId2: curr.empId, days });
       return curr;
     });
-
-    // for (const emp1 of projectEmployeesArray) {
-    //   for (const emp2 of projectEmployeesArray) {
-    //     if (emp1.empId === emp2.empId || passedIds.includes(emp2.empId))
-    //       continue;
-    //     const days = getDaysTogether(
-    //       {
-    //         dateFrom: emp1.dateFrom,
-    //         dateTo: emp1.dateTo,
-    //       },
-    //       {
-    //         dateFrom: emp2.dateFrom,
-    //         dateTo: emp2.dateTo,
-    //       }
-    //     );
-
-    //     passedIds.push(emp1.empId);
-    //     // console.log(days);
-    //     // console.log(emp1.empId);
-    //     // console.log(emp2.empId);
-
-    //     result.push({
-    //       empId1: emp1.empId,
-    //       empId2: emp2.empId,
-    //       days,
-    //     });
-    //   }
-    // }
   }
   return result;
 };

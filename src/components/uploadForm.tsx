@@ -17,13 +17,10 @@ export const UploadForm: React.FC<FormProps> = ({ setData }) => {
     if (!csvFile) return;
     const reader = new FileReader();
     reader.addEventListener("load", () => {
-      //console.log(reader.result);
       if (reader.result && typeof reader.result === "string") {
         setData(getParsedData(reader.result));
       }
     });
-
-    // console.log(csvFile);
     reader.readAsText(csvFile);
   };
 
