@@ -69,13 +69,15 @@ export const getProjectEmployees = async (csvData: ParsedCSVData) => {
   console.log(projectMap);
 
   const res: EmployeesWorkingTogetherData[] = [];
+  const passedIds: number[] = [];
 
   for await (const projectEmployeesArray of projectMap.values()) {
     console.log(projectEmployeesArray);
 
     for (const emp1 of projectEmployeesArray) {
       for (const emp2 of projectEmployeesArray) {
-        if (emp1.empId === emp2.empId) continue;
+        if (emp1.empId === emp2.empId || passedIds.includes(emp2.empId))
+          continue;
         const days = getDaysTogether(
           {
             dateFrom: emp1.dateFrom,
@@ -87,6 +89,7 @@ export const getProjectEmployees = async (csvData: ParsedCSVData) => {
           }
         );
 
+        passedIds.push(emp1.empId);
         console.log(days);
         console.log(emp1.empId);
         console.log(emp2.empId);
@@ -99,36 +102,5 @@ export const getProjectEmployees = async (csvData: ParsedCSVData) => {
       }
     }
   }
-
-  // projectMap.forEach((projectEmployeesArray, projectId) => {
-  //   console.log(projectId);
-  //   console.log(projectEmployeesArray);
-
-  //   for (let i = 0; i < projectEmployeesArray.length; i++) {
-  //     for (let j = i + 1; j < projectEmployeesArray.length - 1; j++) {
-  //       const days = getDaysTogether(
-  //         {
-  //           dateFrom: projectEmployeesArray[i].dateFrom,
-  //           dateTo: projectEmployeesArray[i].dateTo,
-  //         },
-  //         {
-  //           dateFrom: projectEmployeesArray[j].dateFrom,
-  //           dateTo: projectEmployeesArray[j].dateTo,
-  //         }
-  //       );
-
-  //       console.log(days);
-  //       console.log(projectEmployeesArray[i].empId);
-  //       console.log(projectEmployeesArray[j].empId);
-
-  //       res.push({
-  //         empId1: projectEmployeesArray[i].empId,
-  //         empId2: projectEmployeesArray[j].empId,
-  //         days,
-  //       });
-  //     }
-  //   }
-  // });
-
   return res;
 };
