@@ -29,10 +29,15 @@ import {
 //   val.forEach((el) => console.log(el));
 // });
 
-export const getParsedData = (csvString: string, delimiter = ",") => {
+export const getParsedData = (
+  csvString: string,
+  delimiter = ",",
+  haveHeader: boolean = false
+) => {
   const csvData: ParsedCSVData = [];
 
   const rows = csvString.split("\n");
+  if (haveHeader) rows.shift();
 
   for (let row of rows) {
     const rowData = row.split(delimiter);
@@ -49,7 +54,7 @@ export const getParsedData = (csvString: string, delimiter = ",") => {
   return csvData;
 };
 
-export const getProjectEmployees = async (csvData: ParsedCSVData) => {
+export const getProjectEmployees = (csvData: ParsedCSVData) => {
   const projectMap = new Map<number, ProjectEmployeesData[]>();
 
   for (const record of csvData) {
@@ -71,7 +76,7 @@ export const getProjectEmployees = async (csvData: ParsedCSVData) => {
   const res: EmployeesWorkingTogetherData[] = [];
   const passedIds: number[] = [];
 
-  for await (const projectEmployeesArray of projectMap.values()) {
+  for (const projectEmployeesArray of projectMap.values()) {
     console.log(projectEmployeesArray);
 
     for (const emp1 of projectEmployeesArray) {

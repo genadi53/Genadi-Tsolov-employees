@@ -24,17 +24,18 @@ export const DataTable: React.FC<TableProps> = ({ data, clearDataFn }) => {
   >(null);
 
   useEffect(() => {
-    async function a() {
-      console.log(data);
-      const res = await getProjectEmployees(data);
-      console.log(res);
-      setTgData(res);
-    }
-    a();
+    // async function fetchData() {
+    //   console.log(data);
+    //   const res = await getProjectEmployees(data);
+    //   console.log(res);
+    //   setTgData(res);
+    // }
+    // fetchData();
+
     // console.log(data);
-    // const res = getProjectEmployees(data);
+    const res = getProjectEmployees(data);
     // console.log(res);
-    // setTgData(res);
+    setTgData(res);
   }, [data]);
 
   return (
