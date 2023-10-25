@@ -2,8 +2,14 @@
 import React, { useState } from "react";
 import { UploadIcon } from "@/components/uploadIcon";
 import { Button } from "./ui/button";
+import { ParsedCSVData } from "@/utils/types";
+import { getParsedData } from "@/utils/csv";
 
-export const UploadForm: React.FC = () => {
+type FormProps = {
+  setData: React.Dispatch<React.SetStateAction<ParsedCSVData | null>>;
+};
+
+export const UploadForm: React.FC<FormProps> = ({ setData }) => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
 
   const submit = () => {
@@ -11,8 +17,12 @@ export const UploadForm: React.FC = () => {
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       console.log(reader.result);
+      if (reader.result && typeof reader.result === "string") {
+        setData(getParsedData(reader.result));
+      }
     });
-    console.log(csvFile);
+
+    // console.log(csvFile);
     reader.readAsText(csvFile);
   };
 
@@ -37,7 +47,7 @@ export const UploadForm: React.FC = () => {
               />
             </div>
             <p className="my-2 text-xs leading-5 text-primaryDark dark:text-white">
-              Choose a CSV file up to 10MB
+              Choose a CSV file to upload
             </p>
           </div>
         </div>
