@@ -29,13 +29,23 @@ export const DataTable: React.FC<TableProps> = ({ data, clearDataFn }) => {
   }, [data]);
 
   return (
-    <div className="flex flex-col">
-      <Table className="text-center">
+    <div className="flex flex-col w-full">
+      <Button className="my-4" onClick={() => clearDataFn()}>
+        Clear Table
+      </Button>
+
+      <Table className="text-center w-full">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[64px] font-semibold">ID 1</TableHead>
-            <TableHead className="w-[64px] font-semibold">ID 2</TableHead>
-            <TableHead className="w-[64px] font-semibold">Days</TableHead>
+            <TableHead className="w-[64px] font-semibold text-center">
+              ID 1
+            </TableHead>
+            <TableHead className="w-[64px] font-semibold text-center">
+              ID 2
+            </TableHead>
+            <TableHead className="w-[64px] font-semibold text-center">
+              Days
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -49,10 +59,6 @@ export const DataTable: React.FC<TableProps> = ({ data, clearDataFn }) => {
             ))}
         </TableBody>
       </Table>
-
-      <Button className="my-4" onClick={() => clearDataFn()}>
-        Clear Table
-      </Button>
     </div>
   );
 };

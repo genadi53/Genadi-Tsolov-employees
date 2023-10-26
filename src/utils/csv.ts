@@ -12,7 +12,7 @@ export const getParsedData = (
 ) => {
   const csvData: ParsedCSVData = [];
 
-  const rows = csvString.split("\n");
+  const rows = csvString.split("\r");
   if (haveHeader) rows.shift();
 
   for (let row of rows) {

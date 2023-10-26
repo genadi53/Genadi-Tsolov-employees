@@ -2,7 +2,7 @@ import { DatePeriod } from "./types";
 
 export const formatDateString = (dateString: string) => {
   if (dateString === "NULL") {
-    return new Date(Date.now());
+    return new Date();
   }
   return new Date(dateString);
 };
@@ -24,7 +24,7 @@ export const getDaysTogether = (period1: DatePeriod, period2: DatePeriod) => {
   const timeDiff = endDate.getTime() - startDate.getTime();
 
   const overlapDays = timeDiff / (1000 * 60 * 60 * 24);
-  return overlapDays + 1;
+  return Math.round(overlapDays + 1);
 };
 
 export const compareDates = (
